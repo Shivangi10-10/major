@@ -1,34 +1,51 @@
-# Major Project Progress Report
+Smart Traffic Management System with Federated Learning
+This project aims to improve traffic management by dynamically adjusting traffic light durations using federated learning and object detection. Vehicles at an intersection are detected in real-time, and green light duration is adjusted based on traffic load, prioritizing larger vehicles to optimize traffic flow.
 
-## Jaypee Institute of Information Technology, Noida  
-### Major Project - Even Semester, 2024  
-**Progress Report-1**  
+Project Overview
+Federated Learning: Utilizes a federated learning framework to train a model across multiple traffic light locations, ensuring data privacy by only sharing model weights, not raw data.
+YOLOv8 for Object Detection: YOLOv8 is used to detect vehicles and pedestrians in video frames.
+Traffic Light Control: Green light duration is dynamically adjusted based on vehicle type and count, giving priority to larger vehicles (like buses and trucks) to manage congestion effectively.
+Requirements
+Python 3.x
+Libraries: torch, torchvision, opencv-python-headless, tqdm, scikit-learn, pandas, seaborn, ultralytics
+To install dependencies:
 
-1. **Group No:** 7
+bash
+Copy code
+pip install torch torchvision torchaudio opencv-python-headless tqdm scikit-learn pandas seaborn ultralytics
+Project Structure
+extract_frames: Function to extract frames from uploaded video files for object detection.
+detect_vehicles: Function to detect vehicles in frames using YOLOv8.
+TrafficDataset: Custom dataset class for handling vehicle images and labels.
+train_local_model: Function to train individual client models in federated learning.
+federated_avg: Implements the FedAvg algorithm to average model weights across clients.
+TrafficLightController: Class that calculates green light duration based on detected vehicle types and counts.
+How it Works
+Data Collection: Video footage of traffic is uploaded, and frames are extracted.
+Object Detection: YOLOv8 model detects vehicles, classifying them into categories such as cars, buses, and trucks.
+Federated Learning:
+Each traffic light acts as a federated client, training a local model on its own data.
+Models from each client are aggregated to form a global model using the FedAvg algorithm, allowing the system to learn without centralizing data.
+Traffic Light Control:
+The system calculates green light duration based on the weighted count of detected vehicles.
+Federated Learning Algorithm
+The FedAvg algorithm was used for model aggregation. In FedAvg, each client trains a local model, and the weights are averaged to create a global model. This ensures privacy and reduces the need for centralized data.
 
-2. **Group Members Name and Enrollment Number:**  
-   - Shivangi Suyash (9921103053)  
-   - Bhavya Srivastava (9921103089)  
-   - Palak Agarwal (9921103093)  
+Evaluation
+Model accuracy is calculated by checking the correct classifications of vehicle types in the test dataset. The final accuracy provides an assessment of the model’s ability to classify vehicles correctly.
 
-3. **Supervisor:** Prof. Akanksha Mehndiratta
+Example Usage
+python
+Copy code
+# Initialize and use the traffic light controller
+controller = TrafficLightController(global_model)
+sample_frame = video_frames[0]  # Sample frame
+green_duration = controller.control_traffic_light(sample_frame)
+print(f"Recommended green light duration: {green_duration} seconds")
+Visualization
+The visualize_results function allows users to visualize detected vehicles and recommended green light duration on a sample frame, highlighting the system’s functionality.
 
-4. **Title:** Making Traffic Management Smart and Secure using Federated Learning
-
-5. **Objectives of the Project:**
-   - Develop a federated learning architecture for distributed traffic data processing and model training while ensuring data privacy.
-   - Implement a local data processing pipeline for preprocessing and feature extraction from traffic sensor data.
-   - Design and train a local machine learning model to predict optimal traffic light durations based on real-time traffic conditions such as traffic congestion and emergency vehicle presence.
-   - Create a secure communication protocol for model update sharing between edge devices and the central server.
-   - Develop an aggregation algorithm for efficiently combining model updates from multiple sources by researching and modifying available federated learning algorithms.
-   - Implement a system for dynamic traffic light control and emergency vehicle routing based on the federated model predictions.
-
-6. **Work Done So Far:**
-   - Conducted a comprehensive literature review of existing traffic management systems, identifying key challenges and limitations in current approaches.
-   - Researched and evaluated various federated learning architectures to design the most suitable architecture for our traffic management model.
-   - Identified and acquired appropriate datasets for training and testing our model, ensuring diverse traffic scenarios and conditions are represented.
-   - Initiated preprocessing of the selected dataset, including:
-     - **Frame Extraction**: Extracted frames from the uploaded video and saved each frame as an image file.
-     - **Compression**: Compressed the saved frame images into a ZIP file for efficient storage and access.
-     - **Object Detection**: Loaded the YOLOv8 model and used it to detect and count objects in each frame for further analysis.
-
+Future Improvements
+Enhance model by integrating more complex CNN architectures.
+Increase dataset size and diversity.
+Implement real-time deployment for live traffic video analysis.
